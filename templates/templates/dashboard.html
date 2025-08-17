@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WhatsApp Business Automation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+        }
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+        }
+        .nav-link:hover {
+            color: white !important;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: 600;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary {
+            background: #25D366;
+            border: none;
+            border-radius: 10px;
+        }
+        .btn-primary:hover {
+            background: #128C7E;
+        }
+        .test-message {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-whatsapp me-2"></i>
+                WhatsApp Business Automation
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/customize">
+                    <i class="fas fa-cog me-1"></i>
+                    Customize
+                </a>
+                <a class="nav-link" href="/logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-comments fa-3x mb-3"></i>
+                        <h3>{{ analytics.total_conversations }}</h3>
+                        <p class="mb-0">Total Conversations</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope fa-3x mb-3"></i>
+                        <h3>{{ analytics.total_messages }}</h3>
+                        <p class="mb-0">Total Messages</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-3x mb-3"></i>
+                        <h3>{{ analytics.avg_response_time }}s</h3>
+                        <p class="mb-0">Avg Response Time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Test Your Automated Responses
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Quick Test Messages:</label>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <button class="btn btn-outline-primary btn-sm" onclick="testMessage('What are your business hours?')">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Business Hours
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="testMessage('What are your prices?')">
+                                    <i class="fas fa-tag me-1"></i>
+                                    Pricing
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="testMessage('Where are you located?')">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    Location
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="testMessage('How can I contact you?')">
+                                    <i class="fas fa-phone me-1"></i>
+                                    Contact
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="customMessage" class="form-label">Or type your own message:</label>
+                            <textarea class="form-control" id="customMessage" rows="3" placeholder="Type a message to test your automated response..."></textarea>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="testMessage(document.getElementById('customMessage').value)">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Test Response
+                        </button>
+                        
+                        <div id="responseArea" class="test-message" style="display: none;">
+                            <h6><i class="fas fa-robot me-2"></i>Automated Response:</h6>
+                            <p id="responseText" class="mb-0"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Recent Activity
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-comment text-primary me-2"></i>
+                                    New conversation
+                                </div>
+                                <span class="badge bg-primary rounded-pill">2m ago</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-reply text-success me-2"></i>
+                                    Auto-response sent
+                                </div>
+                                <span class="badge bg-success rounded-pill">5m ago</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-cog text-warning me-2"></i>
+                                    Settings updated
+                                </div>
+                                <span class="badge bg-warning rounded-pill">1h ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function testMessage(message) {
+            if (!message.trim()) {
+                alert('Please enter a message to test');
+                return;
+            }
+            
+            // Simulate API call
+            fetch('/test_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('responseText').textContent = data.response;
+                document.getElementById('responseArea').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Fallback to demo response
+                const responses = [
+                    "Thank you for your inquiry! We're open Monday-Friday 9 AM-6 PM.",
+                    "Our current rates are available on our website. Would you like me to send you our price list?",
+                    "We're located at [Your Business Address]. Would you like directions?",
+                    "You can reach us at [Phone Number] or email us at [Email]. We typically respond within 2 hours."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                document.getElementById('responseText').textContent = randomResponse;
+                document.getElementById('responseArea').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

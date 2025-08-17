@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize - WhatsApp Business Automation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #25D366;
+            box-shadow: 0 0 0 0.2rem rgba(37, 211, 102, 0.25);
+        }
+        .btn-primary {
+            background: #25D366;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+        }
+        .btn-primary:hover {
+            background: #128C7E;
+        }
+        .response-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #25D366;
+        }
+        .template-card {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .template-card:hover {
+            border-color: #25D366;
+            background-color: #f8f9fa;
+        }
+        .template-card.selected {
+            border-color: #25D366;
+            background-color: #e8f5e8;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="fab fa-whatsapp me-2"></i>
+                WhatsApp Business Automation
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-cog me-2"></i>Customize Your Automated Responses</h5>
+                        <p class="text-muted mb-0">Personalize how your business responds to common customer inquiries</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <!-- Order/Appointment Response -->
+                            <div class="mb-4">
+                                <label for="order_response" class="form-label">
+                                    <i class="fas fa-calendar-check me-2"></i>Order/Appointment Inquiries
+                                </label>
+                                <textarea class="form-control" id="order_response" name="order_response" rows="3" 
+                                    placeholder="How should we respond when customers ask about orders or appointments?">{{ config.order_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="order_preview">{{ config.order_response }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Pricing Response -->
+                            <div class="mb-4">
+                                <label for="pricing_response" class="form-label">
+                                    <i class="fas fa-tags me-2"></i>Pricing Inquiries
+                                </label>
+                                <textarea class="form-control" id="pricing_response" name="pricing_response" rows="3" 
+                                    placeholder="How should we respond when customers ask about prices?">{{ config.pricing_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="pricing_preview">{{ config.pricing_response }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Business Hours Response -->
+                            <div class="mb-4">
+                                <label for="hours_response" class="form-label">
+                                    <i class="fas fa-clock me-2"></i>Business Hours Inquiries
+                                </label>
+                                <textarea class="form-control" id="hours_response" name="hours_response" rows="3" 
+                                    placeholder="How should we respond when customers ask about business hours?">{{ config.hours_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="hours_preview">{{ config.hours_response }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Location Response -->
+                            <div class="mb-4">
+                                <label for="location_response" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Location Inquiries
+                                </label>
+                                <textarea class="form-control" id="location_response" name="location_response" rows="3" 
+                                    placeholder="How should we respond when customers ask about your location?">{{ config.location_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="location_preview">{{ config.location_response }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Contact Response -->
+                            <div class="mb-4">
+                                <label for="contact_response" class="form-label">
+                                    <i class="fas fa-phone me-2"></i>Contact Information Inquiries
+                                </label>
+                                <textarea class="form-control" id="contact_response" name="contact_response" rows="3" 
+                                    placeholder="How should we respond when customers ask for contact information?">{{ config.contact_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="contact_preview">{{ config.contact_response }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Default Response -->
+                            <div class="mb-4">
+                                <label for="default_response" class="form-label">
+                                    <i class="fas fa-comment me-2"></i>Default Response
+                                </label>
+                                <textarea class="form-control" id="default_response" name="default_response" rows="3" 
+                                    placeholder="What should we say when we don't have a specific response?">{{ config.default_response }}</textarea>
+                                <div class="response-preview">
+                                    <strong>Preview:</strong> <span id="default_preview">{{ config.default_response }}</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save All Responses
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Quick Templates -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-lightbulb me-2"></i>Quick Templates</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small">Click on a template to use it as a starting point:</p>
+                        
+                        <div class="template-card" onclick="applyTemplate('friendly')">
+                            <h6>Friendly & Professional</h6>
+                            <p class="small text-muted">Warm, helpful responses that build relationships</p>
+                        </div>
+                        
+                        <div class="template-card" onclick="applyTemplate('formal')">
+                            <h6>Formal & Business</h6>
+                            <p class="small text-muted">Professional, corporate-style communication</p>
+                        </div>
+                        
+                        <div class="template-card" onclick="applyTemplate('casual')">
+                            <h6>Casual & Friendly</h6>
+                            <p class="small text-muted">Relaxed, approachable tone</p>
+                        </div>
+                        
+                        <div class="template-card" onclick="applyTemplate('urgent')">
+                            <h6>Urgent & Action-Oriented</h6>
+                            <p class="small text-muted">Encourages immediate action</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-tips me-2"></i>Pro Tips</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Keep responses under 160 characters
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Include a call-to-action
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Use emojis sparingly but effectively
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Always be helpful and professional
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Live preview updates
+        document.getElementById('order_response').addEventListener('input', function() {
+            document.getElementById('order_preview').textContent = this.value;
+        });
+        
+        document.getElementById('pricing_response').addEventListener('input', function() {
+            document.getElementById('pricing_preview').textContent = this.value;
+        });
+        
+        document.getElementById('hours_response').addEventListener('input', function() {
+            document.getElementById('hours_preview').textContent = this.value;
+        });
+        
+        document.getElementById('location_response').addEventListener('input', function() {
+            document.getElementById('location_preview').textContent = this.value;
+        });
+        
+        document.getElementById('contact_response').addEventListener('input', function() {
+            document.getElementById('contact_preview').textContent = this.value;
+        });
+        
+        document.getElementById('default_response').addEventListener('input', function() {
+            document.getElementById('default_preview').textContent = this.value;
+        });
+
+        // Template application
+        function applyTemplate(templateType) {
+            const templates = {
+                friendly: {
+                    order_response: "Thank you for your inquiry! 😊 We'd love to help you with your order. Please share your preferred date and time, and we'll confirm within 2 hours.",
+                    pricing_response: "Thanks for asking about our pricing! 💰 We offer competitive rates and would be happy to send you our detailed price list. What specific service are you interested in?",
+                    hours_response: "Great question! ⏰ We're open Monday-Friday 9 AM-6 PM, Saturday 10 AM-4 PM, and closed on Sundays. When would you like to visit?",
+                    location_response: "We're conveniently located at [Your Business Address] 📍 Would you like directions or help finding us?",
+                    contact_response: "You can reach us at [Phone Number] 📞 or email us at [Email] 📧 We typically respond within 2 hours!",
+                    default_response: "Thanks for reaching out! 🙏 A team member will get back to you shortly. Is there anything specific I can help you with in the meantime?"
+                },
+                formal: {
+                    order_response: "Thank you for your inquiry regarding our services. We appreciate your interest and will respond to your order request within 2 business hours.",
+                    pricing_response: "Thank you for your pricing inquiry. Our current rates are available on our website, or we can provide a detailed quote upon request.",
+                    hours_response: "Our business hours are Monday through Friday, 9:00 AM to 6:00 PM, and Saturdays from 10:00 AM to 4:00 PM. We are closed on Sundays.",
+                    location_response: "Our business is located at [Your Business Address]. We would be happy to provide directions or assistance with navigation.",
+                    contact_response: "For immediate assistance, please call us at [Phone Number] or email us at [Email]. We aim to respond to all inquiries within 2 hours.",
+                    default_response: "Thank you for contacting us. A member of our team will respond to your inquiry shortly. Please let us know if you have any urgent questions."
+                },
+                casual: {
+                    order_response: "Hey! Thanks for reaching out about an order 😄 Just let us know when you'd like to book and we'll get back to you super quick!",
+                    pricing_response: "Hey there! 💸 Our prices are pretty competitive. Want me to send you our price list? Just let me know what you're looking for!",
+                    hours_response: "Hey! We're usually around Monday-Friday 9-6, Saturday 10-4, and we take Sundays off 😴 When works best for you?",
+                    location_response: "We're at [Your Business Address] 🗺️ Need help finding us? We can totally give you directions!",
+                    contact_response: "You can hit us up at [Phone Number] 📱 or [Email] 📧 We're pretty quick at getting back to people!",
+                    default_response: "Thanks for the message! 😊 Someone from our team will get back to you soon. Anything else I can help with while you wait?"
+                },
+                urgent: {
+                    order_response: "URGENT: Thank you for your inquiry! ⚡ We have limited availability this week. Please confirm your preferred date NOW to secure your spot!",
+                    pricing_response: "ACT NOW: Special pricing available for limited time! 💥 Contact us immediately for exclusive rates and secure your booking today!",
+                    hours_response: "URGENT: We're open NOW and have immediate availability! ⚡ Don't wait - call us immediately at [Phone Number] to secure your spot!",
+                    location_response: "URGENT: We're located at [Your Business Address] 🚨 Limited time offer available - visit us TODAY to claim your discount!",
+                    contact_response: "URGENT: Call us NOW at [Phone Number] ⚡ We have immediate availability and special offers that expire today!",
+                    default_response: "URGENT: Thank you for your message! ⚡ We have limited availability and special offers. Please call us immediately at [Phone Number] to secure your spot!"
+                }
+            };
+
+            const template = templates[templateType];
+            if (template) {
+                Object.keys(template).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = template[key];
+                        // Update preview
+                        const previewElement = document.getElementById(key.replace('_response', '_preview'));
+                        if (previewElement) {
+                            previewElement.textContent = template[key];
+                        }
+                    }
+                });
+
+                // Show success message
+                alert(`Applied ${templateType} template! Customize the responses as needed.`);
+            }
+        }
+    </script>
+</body>
+</html> 
